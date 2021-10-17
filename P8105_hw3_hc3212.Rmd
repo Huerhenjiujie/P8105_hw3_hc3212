@@ -125,7 +125,7 @@ instacart %>%
 
 __Load and clean BRFSS data set.__
 
-```{r}
+```{r brfss}
 data("brfss_smart2010")
 brfss_df =
   brfss_smart2010 %>% 
@@ -193,8 +193,8 @@ brfss_df %>%
   filter(year %in% c("2006", "2010"),
          locationabbr == "NY") %>%
   group_by(year) %>% 
-  ggplot(aes(data_value, color = year)) +
-  geom_density()+
+  ggplot(aes(data_value, fill = year)) +
+  geom_density(alpha = 0.5)+
   facet_grid(.~ year) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(
