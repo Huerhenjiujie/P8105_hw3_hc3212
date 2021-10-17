@@ -193,14 +193,14 @@ brfss_df %>%
   filter(year %in% c("2006", "2010"),
          locationabbr == "NY") %>%
   group_by(year) %>% 
-  ggplot(aes(x = locationdesc, y = response, color = year)) +
-  geom_point()+
+  ggplot(aes(data_value, color = year)) +
+  geom_density()+
   facet_grid(.~ year) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(
     title = "The distribution of reponse vs location in NY state, 2006, 2010",
-    y = "Response", 
-    x = "The location in NY",
+    y = "Density", 
+    x = "Data value of response",
   ) +
   theme(legend.position = 'none')
   
