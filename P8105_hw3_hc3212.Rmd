@@ -102,7 +102,7 @@ instacart %>%
   filter(product_name == c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
   select(order_dow, order_hour_of_day, product_name) %>% 
   group_by(product_name, order_dow) %>% 
-  summarize(meant = mean(order_hour_of_day)) %>% 
+  summarize(meant = round(mean(order_hour_of_day)), digit = 2) %>% 
   mutate(
     order_dow = case_when(
       order_dow == 1 ~ "Monday",
@@ -134,14 +134,7 @@ brfss_df =
   drop_na(response) %>% 
   mutate(
     response = 
-      case_when(
-        response == "Excellent" ~ 4,
-        response == "Very good" ~ 3,
-        response == "Good" ~ 2,
-        response == "Fair" ~ 1,
-        response == "Poor" ~ 0
-        )
-  )
+      fct_relevel(response, c("Excellent", "Very Good", "Good", "Fair", "Poor")))
 ```
 
 __In 2002, which states were observed at 7 or more locations? What about in 2010?__
