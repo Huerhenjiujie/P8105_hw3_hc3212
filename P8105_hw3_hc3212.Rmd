@@ -269,9 +269,8 @@ __Accelerometer data allows the inspection activity over the course of the day. 
 
 ```{r accel_plot}
 accel_df %>% 
-  mutate(activity_hour = floor((as.numeric(activity_minute)-1))/60) %>% 
-  ggplot(aes(x = activity_hour, y = activity_count, color = day)) + 
-  geom_line(alpha = 0.5) +
+  ggplot(aes(x = activity_minute, y = activity_count, color = day)) + 
+  geom_line(alpha = 0.3) +
   labs(
     title = "24-Hour Activity Count by Day",
     x = "Time",
@@ -279,9 +278,9 @@ accel_df %>%
     caption = "Data from the accel dataset"
   ) + 
   scale_x_continuous(
-    breaks = c(0, 6, 12, 18, 24), 
+    breaks = c(0, 360, 720, 1080, 1440), 
     labels = c("12AM", "6AM", "12PM", "6PM", "11:59PM"),
-    limits = c(0, 24)
+    limits = c(0, 1440)
     )
 ```
 
