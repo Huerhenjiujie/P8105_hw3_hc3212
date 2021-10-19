@@ -10,12 +10,11 @@ output: github_document
 ```{r set, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(p8105.datasets)
-library(dplyr)
 library(ggplot2)
 theme_set(theme_minimal())
 knitr::opts_chunk$set(
   fig.width = 6,
-  fig.asp = 0.6,
+  fig.asp = .6,
   out.width = "90%"
 )
 options(
@@ -60,26 +59,24 @@ There totally 134 aisles, fresh_vegetables(id:83) had most items ordered from.
 
 __Make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.__
 
-```{r aisle_plot, message = FALSE}
+```{r aisle_plot, fig.width=9, message=FALSE}
 instacart %>% 
   group_by(aisle) %>% 
   summarize(n_item = n()) %>% 
   filter(n_item > 10000) %>% 
   mutate(aisle = fct_reorder(aisle, n_item)) %>% 
-  ggplot() +
-  geom_bar(aes(x = n_item, y = aisle, fill = aisle),stat = 'identity', alpha = 0.5) +
+  ggplot(aes(x = n_item, y = aisle, fill = aisle)) +
+  geom_bar(stat = 'identity', alpha = 0.5) +
+  geom_text(aes(label = n_item), size = 2.5, hjust = 0) +
   labs(
     title = "No. of items vs Aisle",
     y = "Aisle", 
     x = "No. of item",
   ) +
-  scale_x_continuous( 
-    breaks = c(10000, 20000, 40000, 80000, 120000)
-    ) +
   theme(
     legend.position = 'none',
-    axis.text.y = element_text(size = 6),
-    axis.text.x = element_text(size = 5))
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 8))
 ```
 
 
@@ -105,7 +102,7 @@ __Make a table showing the mean hour of the day at which Pink Lady Apples and Co
 
 ```{r meantime, message = FALSE}
 instacart %>% 
-  filter(product_name == c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
+  filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
   select(order_dow, order_hour_of_day, product_name) %>% 
   group_by(product_name, order_dow) %>% 
   summarize(meant = round(mean(order_hour_of_day), digit = 2)) %>% 
@@ -173,11 +170,11 @@ excell_df =
 
 __Make a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years – the geom_line geometry and group aesthetic will help).__
 
-```{r spaghetti, message = FALSE}
+```{r spaghetti, fig.width=9, message=FALSE, warning=FALSE}
 excell_df %>% 
   group_by(locationabbr) %>% 
   ggplot(aes(x = year, y = mean_data, color = locationabbr)) +
-  geom_line(alpha = 0.5) +
+  geom_line(alpha = 0.5, size = 0.3) +
   labs(
     title = "The mean data value of state vs year",
     y = "Mean data value", 
@@ -185,7 +182,7 @@ excell_df %>%
     ) +
   scale_colour_hue("State abb") +
   theme(legend.key.size=unit(0.02,'cm')) +
-  theme(legend.key.width=unit(0.05,'cm'))
+  theme(legend.key.width=unit(0.1,'cm'))
 ```
 
 
@@ -198,18 +195,19 @@ __Make a two-panel plot showing, for the years 2006, and 2010, distribution of d
 brfss_df %>% 
   filter(year %in% c("2006", "2010"),
          locationabbr == "NY") %>%
-  group_by(year, response) %>% 
-  ggplot(aes(data_value, fill = response, color = year)) +
+  ggplot(aes(data_value, fill = response)) +
   geom_density(alpha = 0.5)+
   facet_grid(.~ year) +
   labs(
     title = "The distribution of reponse vs location in NY state, 2006, 2010",
     y = "Density", 
     x = "Data value of response",
-  )
+  )+
+  theme(legend.position = "bottom")
   
   
 ```
+
 
 The density plot shows the distribution of data value. In 2006, the response poor has higher density compared to 2010. The peak of other response all shift right in 2010 compared to 2006, which means higher data value in those response. 
 
