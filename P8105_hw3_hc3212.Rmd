@@ -82,6 +82,10 @@ instacart %>%
     axis.text.x = element_text(size = 5))
 ```
 
+
+There are 39 aisles have more than 10000 items sold. The plots shows from the most item sold aisle to the least one above 10000. 
+
+
 __Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.__
 
 ```{r popular3}
@@ -94,6 +98,8 @@ instacart %>%
   arrange(aisle, rank) %>% 
   knitr::kable()
 ```
+
+The top 3 popular item in baking ingredients is Light Brown Sugar, Pure Baking Soda, Cane Sugar. The top 3 popular item in dog food care is Snake Sticks Chicken & Rice Recipe Dog treats, Organix Chicken & Brown Rice, Small Dog Biscuits. The top 3 popular item in packaged vegetables fruits is Organic Baby Spinach, Organic Raspberries, Organic Blueberries. According to table, we could found that the items number has great different between aisles.
 
 __Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 7 table).__
 
@@ -121,6 +127,9 @@ instacart %>%
   knitr::kable()
 ```
 
+The Table shows mean hour of the Coffee Ice Cream and Pink Lady Apples sale. It could find that the hour of Pink Lady Apples fluctuate a little during the week while the Coffee Ice Cream has higher mean in the weekdays.
+
+
 ## Problem 2
 
 __Load and clean BRFSS data set.__
@@ -144,11 +153,11 @@ brfss_df %>%
   filter(year %in% c("2002", "2010")) %>% 
   group_by(year, locationabbr) %>% 
   summarize(nloc = n_distinct(geo_location)) %>% 
-  filter(nloc > 7) %>% 
+  filter(nloc >= 7) %>% 
   knitr::kable()
 ```
 
-According to the result, 3 states (MA NJ PA) were observed at 7 or more locations in 2002, while 11 states (CA FL MA MD NC NE NJ NY OH TX WA) were observed at 7 or more locations in 2010.
+According to the result, 6 states (CT FL NC MA NJ PA) were observed at 7 or more locations in 2002, while 14 states (CA CO FL MA MD NC NE NJ NY OH PA SC TX WA) were observed at 7 or more locations in 2010.
 
 __Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.__
 
@@ -180,6 +189,8 @@ excell_df %>%
 ```
 
 
+The spaghetti plot shows the fluctuate of data_value together with year. From the plot, it could find that, in 2005, there was a decrease trend in data value, while it increased soon in the 2006. Though decreased again in 2007, in 2008, data value in most state increased again. Most of the value are between 20 and 25.
+
 
 __Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.__
 
@@ -187,19 +198,20 @@ __Make a two-panel plot showing, for the years 2006, and 2010, distribution of d
 brfss_df %>% 
   filter(year %in% c("2006", "2010"),
          locationabbr == "NY") %>%
-  group_by(year) %>% 
-  ggplot(aes(data_value, fill = year)) +
+  group_by(year, response) %>% 
+  ggplot(aes(data_value, fill = response, color = year)) +
   geom_density(alpha = 0.5)+
   facet_grid(.~ year) +
   labs(
     title = "The distribution of reponse vs location in NY state, 2006, 2010",
     y = "Density", 
     x = "Data value of response",
-  ) +
-  theme(legend.position = 'none')
+  )
   
   
 ```
+
+The density plot shows the distribution of data value. In 2006, the response poor has higher density compared to 2010. The peak of other response all shift right in 2010 compared to 2006, which means higher data value in those response. 
 
 ## Problem 3
 
